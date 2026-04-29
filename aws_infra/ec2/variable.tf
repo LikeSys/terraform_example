@@ -1,0 +1,9 @@
+# aws_infra/ec2/variable.tf
+variable "region" { type = string }
+variable "prefix" { type = string }
+variable "key_name" { type = string }
+variable "instance_type" { type = string }
+variable "ami_id" {
+  default = "ami-0765f9741eedf9c7b"
+  type    = string
+}
