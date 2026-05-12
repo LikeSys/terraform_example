@@ -30,6 +30,9 @@ resource "aws_lb_target_group" "aws08_alb_was_group" {
     healthy_threshold   = 5
     unhealthy_threshold = 2
   }
+  tags = {
+    Name = "${var.prefix}-alb-was-group"
+  }
 }
 
 # Jenkins 대상그룹 생성

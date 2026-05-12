@@ -34,7 +34,7 @@ resource "aws_launch_template" "aws08_was_lt" {
 
 # 2. Auto Scaling Group
 resource "aws_autoscaling_group" "aws08_was_asg" {
-  name = "${var.prefix}-asg"
+  name = "${var.prefix}-was-asg"
   vpc_zone_identifier = data.aws_subnets.aws08_private_subnets.ids
 
   launch_template {
