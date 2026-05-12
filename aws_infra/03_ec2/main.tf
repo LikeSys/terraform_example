@@ -1,4 +1,6 @@
 # aws_infra/ec2/main.tf
+
+# 1. 원본 instance 생성
 resource "aws_instance" "aws08_instance" {
   ami                         = var.ami_id
   instance_type               = var.instance_type
@@ -22,6 +24,7 @@ resource "aws_instance" "aws08_instance" {
               ./install auto
               sudo systemctl enable codedeploy-agent
               sudo systemctl start codedeploy-agent
+
               ${file("${path.module}/user_data/docker-install.sh")}
             EOF
 
@@ -30,7 +33,7 @@ resource "aws_instance" "aws08_instance" {
   }
 }
 
-# 설치하는 동안 대기
+# 2. Code Deploy Agent, Docker 설치하는 동안 대기
 resource "null_resource" "aws08_delay" {
   provisioner "local-exec" {
     command = "sleep 200"
@@ -38,7 +41,7 @@ resource "null_resource" "aws08_delay" {
   depends_on = [aws_instance.aws08_instance]
 }
 
-# 원본 instance를 이용해 AMI 생성
+# 3. 원본 instance를 이용해 AMI 생성
 resource "aws_ami_from_instance" "aws08_ami" {
   name = "${var.prefix}-instance-ami"
   source_instance_id = aws_instance.aws08_instance.id

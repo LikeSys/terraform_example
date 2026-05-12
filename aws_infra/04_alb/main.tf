@@ -41,7 +41,7 @@ resource "aws_lb_target_group" "aws08_alb_jenkins_group" {
   health_check {
     path = "/login"
     protocol = "HTTP"
-    matcher = "200,302"
+    matcher = "200"
     interval = 30
     timeout = 5
     healthy_threshold = 5
@@ -59,7 +59,6 @@ resource "aws_lb_listener" "aws08_alb_listener" {
   protocol = "HTTPS"
   ssl_policy = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   certificate_arn = var.certificate_arn
-  //target_group_arn = aws_lb_target_group.aws08_alb_target_group.arn
   default_action {
     type = "fixed-response"
     fixed_response {
@@ -73,7 +72,7 @@ resource "aws_lb_listener" "aws08_alb_listener" {
 # WAS 리스너 규칙
 resource "aws_lb_listener_rule" "aws08_alb_was_rule" {
   listener_arn = aws_lb_listener.aws08_alb_listener.arn
-  priority = 1
+  priority = 10
   action {
     type = "forward"
     target_group_arn = aws_lb_target_group.aws08_alb_was_group.arn
