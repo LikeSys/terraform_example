@@ -5,7 +5,7 @@ echo "🐳 컨테이너 내부 Docker CLI 설치를 시작합니다..."
 
 # 1. 기존 불필요한 패키지 제거 및 필수 패키지 설치
 apt-get update -y
-apt-get install -y ca-certificates curl gnupg
+apt-get install -y ca-certificates curl gnupg zip
 
 # 2. Docker 공식 GPG 키 등록
 install -m 0755 -d /etc/apt/keyrings
