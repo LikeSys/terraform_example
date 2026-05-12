@@ -10,7 +10,7 @@ resource "aws_launch_template" "aws08_was_lt" {
   key_name = var.key_name
 
   iam_instance_profile {
-    name = data.aws_iam_instance_profile.aws08_ec2_instance_profile.name
+    name = data.aws_iam_instance_profile.aws08_ec2_profile.name
   }
 
   network_interfaces {
