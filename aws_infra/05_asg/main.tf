@@ -5,18 +5,20 @@ resource "aws_launch_template" "aws08_was_lt" {
   name_prefix = "${var.prefix}-was-lt-"
 
   # data에서 찾은 최신 AMI ID 사용
-  image_id = data.aws_ami.was_ami.id
+  image_id = data.terraform_remote_state.ec2.outputs.ami_id
+
+
   instance_type = var.instance_type
   key_name = var.key_name
 
   iam_instance_profile {
-    name = data.aws_iam_instance_profile.aws08_ec2_profile.name
+    name = data.terraform_remote_state.iam.outputs.ec2_instance_profile_name
   }
 
   network_interfaces {
     associate_public_ip_address = "false"
     security_groups = [
-      data.aws_security_group.aws08_was_sg.id
+      data.terraform_remote_state.network.outputs.http_sg_id
     ]
   }
 
@@ -35,14 +37,14 @@ resource "aws_launch_template" "aws08_was_lt" {
 # 2. Auto Scaling Group
 resource "aws_autoscaling_group" "aws08_was_asg" {
   name = "${var.prefix}-was-asg"
-  vpc_zone_identifier = data.aws_subnets.aws08_private_subnets.ids
+  vpc_zone_identifier = data.terraform_remote_state.network.outputs.private_subnet_ids
 
   launch_template {
     id      = aws_launch_template.aws08_was_lt.id
     version = "$Latest"
   }
 
-  target_group_arns = [data.aws_lb_target_group.aws08_was_tg.arn]
+  target_group_arns = [data.terraform_remote_state.alb.outputs.was_tg]
 
   min_size = "1"
   max_size = "3"
